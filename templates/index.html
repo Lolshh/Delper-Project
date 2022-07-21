@@ -7,7 +7,7 @@
     <meta name="author" content=""/>
     <title>DELPER PROJECT</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico"/>
+    <link rel="icon" src="static/assets/delper-logo.png" type="image/x-icon">
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Simple line icons-->
@@ -20,13 +20,15 @@
     <link href="../static/styles.css" rel="stylesheet"/>
 
     <script src="https://unpkg.com/scrollreveal@4"></script>
+    <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+
     <script type="text/javascript"> myVar = {{ data | tojson }}; </script>
 
 </head>
-<body class="bg-special2" id="page-top">
+<body class="bg-main" id="page-top" >
 
 <!-- Navigation-->
-<a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+<a class="menu-toggle rounded" href="#"></a>
 <nav id="sidebar-wrapper">
     <ul class="sidebar-nav">
         <li class="sidebar-nav-item"><a href="/">Home</a></li>
@@ -37,9 +39,9 @@
 </nav>
 <!-- Header-->
 <section class="header-masthead">
-    <a class="btn btn-outline-dark ms-2" href="/login" id="loginButtonHeaderPage">Log In</a>
-    <a class="btn btn-outline-dark ms-2" href="/register" id="registerButtonHeaderPage">Register</a>
-    <a class="btn btn-outline-dark ms-2" href="/logout" id="logoutButtonHeaderPage">Log Out</a>
+    <a class="btn btn-outline-light ms-2" href="/login" id="loginButtonHeaderPage">Log In</a>
+    <a class="btn btn-outline-light ms-2" href="/register" id="registerButtonHeaderPage">Register</a>
+    <a class="btn btn-outline-light ms-2" href="/logout" id="logoutButtonHeaderPage">Log Out</a>
 </section>
 <script>
     const l = document.getElementById("loginButtonHeaderPage");
@@ -59,15 +61,27 @@
 </script>
 <header class="masthead d-flex align-items-center">
     <div class="container px-4 px-lg-5 text-center">
-        <h1 class="mb-1">DELPER PROJECT</h1>
-        <h1 class="mb-1">{{ message }}</h1>
+            <svg viewBox="0 0 960 300">
+                <symbol id="s-text">
+                    <text text-anchor="middle" x="50%" y="80%">DELPER PROJECT</text>
+                </symbol>
+                <g class = "g-ants">
+                  <use xlink:href="#s-text" class="text-copy"></use>
+                  <use xlink:href="#s-text" class="text-copy"></use>
+                  <use xlink:href="#s-text" class="text-copy"></use>
+                  <use xlink:href="#s-text" class="text-copy"></use>
+                </g>
+            </svg>
         <h3 class="mb-5"><em>Give us a project and we do it for you</em></h3>
-        <a class="btn btn-outline-dark" href="#presentation">Find Out Why</a>
+        <a class="btn btn-outline-light" href="#presentation">Find Out Why</a>
+
     </div>
 </header>
+<div class="elfsight-app-b0fbd6fb-809c-45b3-9d64-733b1f36d2c6"></div>
+
 
 <section class="masthead d-flex align-items-center" id="presentation">
-    <p class="alinea px-4 px-lg-5" style="text-align: justify;">
+    <p class="alinea px-4 px-lg-5 text-white" style="text-align: justify;">
         Lorem ips um dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Quis ipsum suspendisse ultrices gravida dictum. Scelerisque viverra mauris in aliquam sem
         fringilla. Sed viverra ipsum nunc aliquet bibendum enim facilisis gravida. Integer feugiat scelerisque varius
@@ -75,7 +89,7 @@
         nec sagittis aliquam. Netus et malesuada fames ac turpis egestas integer eget aliquet. Tempor orci eu lobortis
         elementum nibh tellus molestie nunc non. Pharetra et ultrices neque ornare.
     </p>
-    <p class="alinea px-4 px-lg-5" style="text-align: justify;">
+    <p class="alinea px-4 px-lg-5 text-white" style="text-align: justify;">
         Vitae auctor eu augue ut lectus. Sollicitudin tempor id eu nisl nunc mi. Mi sit amet mauris commodo quis
         imperdiet massa. Imperdiet nulla malesuada pellentesque elit eget gravida cum sociis natoque. Duis at
         consectetur lorem donec massa sapien faucibus et. Et netus et malesuada fames ac. Ornare massa eget egestas
@@ -99,14 +113,12 @@
 
 
 <!-- Other Information -->
-<section class="bg-dark" id="other-info">
+<footer class="bg-dark" id="other-info">
     <div class="text-white text-center">
         OTHER INFORMATION
     </div>
-</section>
+</footer>
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->

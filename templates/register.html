@@ -21,10 +21,22 @@
         <link href="../static/styles.css" rel="stylesheet"/>
 
         <script src="https://unpkg.com/scrollreveal@4"></script>
+        <script type="text/javascript" src="js/36d/jquery-1.4.2.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("form").bind("keypress", function (e) {
+                    if (e.keyCode == 13) {
+                        return false;
+                    }
+                });
+            });
+        </script>
+
 
     </head>
 </head>
-<body class="bg-special2">
+<body class="bg-main">
 <!-- Navigation-->
 <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
 <nav id="sidebar-wrapper">
@@ -57,28 +69,28 @@
                 <div>
                     <div class="px-4 py-5 px-md-5">
                         <div>{{ message }}</div>
-                        <form action="/register" method="POST">
+                        <form action="/register" method="POST" onkeypress="AbortSignal">
                             <div class="row">
                                 <div class="col-md-6 mb-4">
                                     <div class="form-outline">
-                                        <input type="text" name="username" class="form-control" placeholder="Username"/>
+                                        <input type="text" name="username" class="form-control" placeholder="Username" onkeydown="return (event.keyCode!=13);"/>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Email input -->
                             <div class="form-outline mb-4">
-                                <input type="email" name="email" class="form-control" placeholder="Email Address"/>
+                                <input type="email" name="email" class="form-control" placeholder="Email Address" onkeydown="return (event.keyCode!=13);"/>
                             </div>
 
                             <!-- Password input -->
                             <div class="form-outline mb-4">
-                                <input type="password" name="password" class="form-control" placeholder="Password"/>
+                                <input type="password" name="password" class="form-control" placeholder="Password" onkeydown="return (event.keyCode!=13);"/>
                             </div>
 
                             <div class="form-outline mb-4">
                                 <input type="password" name="passwordCheck" class="form-control"
-                                       placeholder="Repeat Password"/>
+                                       placeholder="Repeat Password" onkeydown="return (event.keyCode!=13);"/>
                             </div>
 
                             <!-- Checkbox -->

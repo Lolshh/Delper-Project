@@ -79,5 +79,28 @@ function fadeIn(el, display) {
     })();
 };
 
+function scale2(id){
+    var t = document.getElementById(id);
+    t.hidden = false;
+    t.className = "rectangleScale center-screen";
+}
+
+function hidden(id){
+    var t = document.getElementById(id);
+    t.hidden = true;
+}
+
+window.onkeydown = function keypress(event) {
+  if (event.keyCode == 27) {
+    var t = document.getElementById("PythonShowRoomRectangle");
+    t.hidden = true;
+  }
+}
+
+    $(document).ready(function() {
+        $('#multiple-checkboxes').multiselect({
+          includeSelectAllOption: true,
+        });
+    });
 
 

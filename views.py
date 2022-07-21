@@ -85,6 +85,7 @@ def logout():
 
 @views.route("/account")
 def account():
+    return render_template("account.html", message =" ")
     with sqlite3.connect("delper.db") as con:
         curr = con.cursor()
         curr_id = curr.execute('SELECT * FROM users WHERE (ID=?)', (active_id,))
@@ -123,3 +124,15 @@ def javashowroom():
 @views.route("/services/javascriptShowRoom")
 def javascriptshowroom():
     return render_template("ShowRoom/javascriptShowRoom.html")
+
+
+@views.route("/services/htmlShowRoom")
+def htmlshowroom():
+    return render_template("ShowRoom/htmlShowRoom.html")
+
+
+@views.route("/services/cssShowRoom")
+def cssshowroom():
+    return render_template("ShowRoom/cssShowRoom.html")
+
+
