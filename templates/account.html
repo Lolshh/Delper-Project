@@ -14,18 +14,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
           rel="stylesheet"/>
     <!-- Pure CSS CDN-->
-   <link rel="stylesheet" href=
-"https://unpkg.com/purecss@2.0.6/build/pure-min.css"
-         integrity=
-"sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5"
-         crossorigin="anonymous">
+    <link rel="stylesheet" href=
+            "https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+          integrity=
+                  "sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5"
+          crossorigin="anonymous">
 
-   <!-- Internal CSS -->
-   <style>
-      .menu-custom {
-         height: 150px;
-      }
-   </style>
+    <!-- Internal CSS -->
+    <style>
+        .menu-custom {
+            height: 150px;
+        }
+    </style>
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic"
           rel="stylesheet" type="text/css"/>
@@ -36,12 +36,17 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript"> myVar = {{ data | tojson }}; </script>
+
 </head>
 <body class="bg-main" id="page-top">
 
+<div class="cache bg-transparent position-absolute" hidden id="displayedCache">
+</div>
 <!-- Navigation-->
 <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
 <nav id="sidebar-wrapper">
@@ -54,48 +59,72 @@
 </nav>
 <!-- Header-->
 <header class="masthead d-flex">
-    <div class="accountUsernameRectangle">
-        <h2 class="text-white mt-3 ml-5">USERNAME</h2>
+
+    <!-- Displayed Project -->
+    <div class="growingRectangleAnimation container bg-white center-screen no-scrollbar overflow-scroll" id="displayedProject" hidden>
+        <div>
+            <h2 class="mt-5" style="text-align: center" id="displayedProjectTitle"></h2>
+            <p class="p-5" id="displayedProjectDescription"></p>
+            <ul id="displayedProjectLang"></ul>
+        </div>
     </div>
+
+    <!-- Username Rectangle -->
+    <div class="accountUsernameRectangle">
+        <h2 class="text-white mt-5 ms-4">{{ username }}</h2>
+        <i class="ms-4 text-white"> member since : {{ date }}</i>
+    </div>
+
+     <!-- List of projects -->
     <div class="accountProjectRectangle pure-menu pure-menu-scrollable menu-custom no-scrollbar">
         <h2 class="text-center text-white mt-3">PROJECTS</h2>
         <br/>
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item">
-                <a href="#" class="pure-menu-link">
-                    Projet 1
-                </a>
-            </li>
+        <ul class="pure-menu-list" id="projectsList">
         </ul>
     </div>
+
+     <!-- Create a new project -->
     <div class="accountCreateProjectRectangle">
         <h2 class="text-center text-white mt-3 ml-5">Create Projects</h2>
         <br/>
-        <form class="p-5">
-            <div class="form-group">
-                <label class="text-white" for="formGroupExampleInput">Project Title</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Title">
-            </div>
-            <div class="form-group">
-                <label class="text-white" for="exampleFormControlTextarea1">Project's Description</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" placeholder="Project's Description..."></textarea>
+        <form class="p-5" id="projectCreationForm" action="/createProject" method="POST">
+
+            <!-- Project Title -->
+            <div class="form-group" onkeydown="return (event.keyCode!=13);">
+                <label class="text-white" for="projectTitle">Project Title</label>
+                <input type="text" class="form-control" name="projectTitle" id="projectTitle" placeholder="Title">
             </div>
 
-            <div class="form-group">
-            <label class="text-white" for="languagePicker">Pick programmation language(s)</label>
-            <br/>
-            <select class="selectpicker" multiple data-live-search="true" id="languagePicker">
-                <option>Python</option>
-                <option>Solidity</option>
-                <option>Java</option>
-                <option>JavaScript</option>
-                <option>HTML</option>
-                <option>CSS</option>
-            </select>
+            <!-- Project Description -->
+            <div class="form-group" onkeydown="return (event.keyCode!=13);">
+                <label class="text-white" for="projectDescription">Project's Description</label>
+                <textarea class="form-control" name="projectDescription" id="projectDescription" rows="6"
+                          placeholder="Project's Description..."></textarea>
             </div>
+
+            <!-- Used Language -->
+            <div class="form-group" onkeydown="return (event.keyCode!=13);">
+                <label class="text-white" for="languagePicker">Pick programmation language(s)</label>
+                <br/>
+                <select class="selectpicker" multiple data-live-search="true" name="languagePicker" id="languagePicker">
+                    <option>Python</option>
+                    <option>Solidity</option>
+                    <option>Java</option>
+                    <option>JavaScript</option>
+                    <option>HTML</option>
+                    <option>CSS</option>
+                </select>
+            </div>
+
+            <!-- Add a file upload mechanism in case user has already been working on the project-->
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-outline-dark" name="button" id="createProject">
+                Create Project
+            </button>
         </form>
-
     </div>
+
 </header>
 
 <br/>
@@ -109,6 +138,7 @@
     </div>
 </section>
 
+
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
 <!-- Bootstrap core JS-->
@@ -116,7 +146,50 @@
 <!-- Core theme JS-->
 <script src="../static/scripts.js"></script>
 
-<script>ScrollReveal().reveal(".alinea");</script>
+<script>
+    const l = document.getElementById("projectsList");
+    const c = document.getElementById("displayedCache");
+    const dpProject = document.getElementById("displayedProject");
+    const dpTitle = document.getElementById("displayedProjectTitle");
+    const dpDescription = document.getElementById("displayedProjectDescription");
+    const dpLang = document.getElementById("displayedProjectLang");
+
+    function removeChildren(node){
+        while (node.firstChild){
+                node.removeChild(node.firstChild);
+            }
+    }
+    for (let i = 0; i < myVar.length; i++) {
+        let li = document.createElement('li');
+        li.className = "pure-menu-item"
+        let a = document.createElement('a');
+        a.className = "pure-menu-link";
+        a.innerText = myVar[i][2];
+        a.onclick= () => {
+            c.hidden = false;
+            dpProject.hidden = false;
+            dpTitle.innerText = myVar[i][2];
+            dpDescription.innerText = myVar[i][3];
+            removeChildren(dpLang);
+            let lang = myVar[i][4].split(", ");
+            for (let j = 0; j < lang.length; j++) {
+                let tempL = document.createElement('li');
+                tempL.innerText = lang[j];
+                dpLang.appendChild(tempL);
+            }
+        }
+        li.appendChild(a);
+        l.appendChild(li);
+        c.onclick = () => {
+            c.hidden = true;
+            dpProject.hidden = true;
+            dpTitle.innerText = "";
+            dpDescription.innerText = "";
+            removeChildren(dpLang);
+        }
+    }
+</script>
 
 </body>
+
 </html>

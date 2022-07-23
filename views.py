@@ -1,18 +1,17 @@
-from flask import Blueprint, render_template, request, redirect
+from datetime import date
 import sqlite3
+from flask import Blueprint, render_template, request, redirect
 
 views = Blueprint(__name__, "views")
 active_session = False
+godmode = False
 active_id = -1
 
 
 @views.route("/")
 def home():
     if active_session:
-        with sqlite3.connect("delper.db") as con:
-            curr = con.cursor()
-            curr_id = curr.execute('SELECT * FROM users WHERE (ID=?)', (active_id,))
-            return render_template("index.html", data=str(curr_id.fetchone()[0]))
+        return render_template("index.html", data="DEFINED")
     return render_template("index.html", data="UNDEFINED")
 
 
@@ -26,6 +25,7 @@ def register():
             password = request.form.get('password')
             passwordcheck = request.form.get('passwordCheck')
             newsletter = request.form.get('newsletter')
+            today = date.today()
 
             # Check when enter is pressed why creating
 
@@ -43,9 +43,13 @@ def register():
             elif EmailCheckExists:
                 return render_template('register.html', message="This email address is already linked with an account.")
             else:
-                user_id = curr.execute("SELECT COUNT(*) FROM users")
-                curr.execute('INSERT INTO users VALUES(?, ?, ?, ?, ?)',
-                             (username, email, password, newsletter, user_id.fetchone()[0]))
+                user_id = curr.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+                curr.execute('INSERT INTO users VALUES(?, ?, ?, ?, ?, ?)',
+                             (username, email, password, newsletter, today, False, user_id))
+                global active_id
+                global active_session
+                active_session = True
+                active_id = user_id
                 return redirect("/")
     return render_template("register.html")
 
@@ -66,8 +70,12 @@ def login():
             if size == 1 and specificAccount is not None:
                 global active_id
                 global active_session
+                global godmode
                 active_id = specificAccount[-1]
                 active_session = True
+                if list(specificAccount)[-2]:
+                    godmode = True
+                    active_id = 0
                 return redirect("/")
             else:
                 return render_template("login.html", message="Wrong username or password. Please try again.")
@@ -78,18 +86,57 @@ def login():
 def logout():
     global active_id
     global active_session
+    global godmode
     active_id = -1
     active_session = False
+    godmode = False
     return render_template("index.html", data="UNDEFINED")
 
 
-@views.route("/account")
+@views.route("/account", methods=["GET", "POST"])
 def account():
-    return render_template("account.html", message =" ")
+    global godmode
+    global active_id
+    if active_session:
+        with sqlite3.connect("delper.db") as con:
+            curr = con.cursor()
+            user_info = list(curr.execute('SELECT * FROM users WHERE ID = ?', (active_id,)).fetchone())
+            if not (godmode and active_id == 0):
+                proj = list(curr.execute('SELECT * FROM projects WHERE USER_ID = ? ORDER BY PROJECT_ID', (active_id,)))
+                return render_template("account.html", message=" ", data=proj, date=user_info[-3],
+                                       username=user_info[0])
+            else:
+                return redirect("/godmode")
+    else:
+        return render_template("noaccount.html")
+
+
+@views.route("/createProject", methods=["GET", "POST"])
+def create_project():
     with sqlite3.connect("delper.db") as con:
-        curr = con.cursor()
-        curr_id = curr.execute('SELECT * FROM users WHERE (ID=?)', (active_id,))
-    return render_template("account.html", message=str(curr_id.fetchone()[0])) if active_session else render_template("noaccount.html")
+        if request.method == "POST":
+            curr = con.cursor()
+            project_id = curr.execute("SELECT COUNT(*) FROM projects WHERE USER_ID = ?", (active_id,))
+            title = request.form.get('projectTitle')
+            description = request.form.get('projectDescription')
+            languages = request.form.getlist('languagePicker')
+            languages = ', '.join(languages)
+            curr.execute('INSERT INTO projects VALUES(?, ?, ?, ?, ?)',
+                         (active_id, project_id.fetchone()[0], title, description, languages))
+    return redirect('/account')
+
+
+@views.route("/godmode", methods=["GET", "POST"])
+def godmode():
+    global godmode
+    global active_id
+    if not godmode:
+        return redirect("/")
+    with sqlite3.connect("delper.db") as con:
+        if request.method == "POST":
+            active_id = int(request.form.get("userID"))
+            return redirect("/account")
+    return render_template("godmodeView.html")
 
 
 @views.route("/services")
@@ -134,5 +181,3 @@ def htmlshowroom():
 @views.route("/services/cssShowRoom")
 def cssshowroom():
     return render_template("ShowRoom/cssShowRoom.html")
-
-
